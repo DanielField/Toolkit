@@ -1,0 +1,4 @@
+D:\ToolKit\Tools\Tools\bin\Release\Tools.dll
+D:\ToolKit\Tools\Tools\bin\Release\Tools.pdb
+D:\ToolKit\Tools\Tools\obj\Release\Tools.dll
+D:\ToolKit\Tools\Tools\obj\Release\Tools.pdb
