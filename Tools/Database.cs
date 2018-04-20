@@ -92,11 +92,23 @@ namespace Tools {
             return true;
         }
 
-        public DataSet GetAll(string table) {
-            return ExecuteQuery(string.Format("SELECT * FROM {0};", table));
+        /// <summary>
+        /// Get all of the rows from a specified table.
+        /// </summary>
+        /// <param name="table">The table from which the rows are retrieved.</param>
+        /// <returns>Collection of rows.</returns>
+        public DataRowCollection GetAll(string table) {
+            DataRowCollection rows = ExecuteQuery(string.Format("SELECT * FROM {0};", table)).Tables[0].Rows;
+            return rows;
         }
 
-        public DataSet GetAllFromColumns(string table, params string[] columns) {
+        /// <summary>
+        /// Get all of the rows from a specified table, and specify which columns to retrieve.
+        /// </summary>
+        /// <param name="table">The table from which the rows are retrieved.</param>
+        /// <param name="columns">The columns to include in the result.</param>
+        /// <returns>Collection of rows.</returns>
+        public DataRowCollection GetAll(string table, params string[] columns) {
             string query = "SELECT {0} FROM {1};";
 
             string columnString = "";
@@ -108,7 +120,8 @@ namespace Tools {
 
             query = string.Format(query, columnString, table);
 
-            return ExecuteQuery(query);
+            DataRowCollection rows = ExecuteQuery(query).Tables[0].Rows;
+            return rows;
         }
     }
 }
