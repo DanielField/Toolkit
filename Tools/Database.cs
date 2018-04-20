@@ -10,14 +10,14 @@ namespace Tools {
         /// <summary>
         /// The object which makes the database connection.
         /// </summary>
-        private OdbcConnection dbCon;
+        public OdbcConnection databaseConnection { get; }
 
         /// <summary>
         /// Construct the Database with a specified connection string.
         /// </summary>
         /// <param name="connectionString"></param>
         public Database(string connectionString) {
-            dbCon = new OdbcConnection(connectionString);
+            databaseConnection = new OdbcConnection(connectionString);
         }
 
         /// <summary>
@@ -26,14 +26,14 @@ namespace Tools {
         /// <param name="query">Query to be executed.</param>
         /// <returns>DataSet containing the result of the query.</returns>
         public DataSet ExecuteQuery(string query) {
-            OdbcDataAdapter dbAdapter = new OdbcDataAdapter(query, dbCon);
+            OdbcDataAdapter dbAdapter = new OdbcDataAdapter(query, databaseConnection);
 
-            dbCon.Open();
+            databaseConnection.Open();
 
             DataSet data = new DataSet();
             dbAdapter.Fill(data);
 
-            dbCon.Close();
+            databaseConnection.Close();
 
             return data;
         }
@@ -43,11 +43,11 @@ namespace Tools {
         /// </summary>
         /// <param name="command">The command to be executed.</param>
         public void ExecuteCommand(string command) {
-            OdbcCommand dbCmd = new OdbcCommand(command, dbCon);
+            OdbcCommand dbCmd = new OdbcCommand(command, databaseConnection);
 
-            dbCon.Open();
+            databaseConnection.Open();
             dbCmd.ExecuteNonQuery();
-            dbCon.Close();
+            databaseConnection.Close();
         }
 
         /// <summary>
@@ -57,12 +57,12 @@ namespace Tools {
         /// <returns>Return a boolean indicating whether the commands were successful.</returns>
         public bool ExecuteCommands(params string[] commands) {
             OdbcCommand cmd = new OdbcCommand();
-            cmd.Connection = dbCon;
+            cmd.Connection = databaseConnection;
             OdbcTransaction transaction = null;
-            dbCon.Open();
+            databaseConnection.Open();
 
             try {
-                transaction = dbCon.BeginTransaction();
+                transaction = databaseConnection.BeginTransaction();
                 cmd.Transaction = transaction;
 
                 // Execute each query; if there is an exception, it will be caught before commiting.
@@ -81,14 +81,14 @@ namespace Tools {
                     // Transaction failed to rollback.
                 } finally {
                     // Close connection regardless of whether it rolled back or not.
-                    dbCon.Close();
+                    databaseConnection.Close();
                 }
                 // Transaction failed, so return false.
                 return false;
             }
 
             // Close connection and return true, indicating that the transaction was successful.
-            dbCon.Close();
+            databaseConnection.Close();
             return true;
         }
     }
