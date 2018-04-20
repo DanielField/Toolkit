@@ -91,5 +91,24 @@ namespace Tools {
             databaseConnection.Close();
             return true;
         }
+
+        public DataSet GetAll(string table) {
+            return ExecuteQuery(string.Format("SELECT * FROM {0};", table));
+        }
+
+        public DataSet GetAllFromColumns(string table, params string[] columns) {
+            string query = "SELECT {0} FROM {1};";
+
+            string columnString = "";
+            for (int i = 0; i < columns.Length; i++) {
+                if (i < columns.Length - 1)
+                    columnString += columns[i] + ", ";
+                else columnString += columns[i];
+            }
+
+            query = string.Format(query, columnString, table);
+
+            return ExecuteQuery(query);
+        }
     }
 }
